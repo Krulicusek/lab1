@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Xml.Serialization;
 
 namespace lab1
 {
@@ -7,6 +8,7 @@ namespace lab1
         #region Members
         private List<double?> randomNumbersList = new();
         #endregion
+
         #region Properties
         List<double?> RandomNumbersList
         {
@@ -16,6 +18,7 @@ namespace lab1
 
         public int PrintCount { get; set; }
         #endregion
+
         #region Methods
         public void GetReadingsList(int count)
         {
@@ -28,6 +31,7 @@ namespace lab1
             }
             randomNumbersList =  numbers;
         }
+
         public double? GetNewReading()
         {
             Random random = new();
@@ -45,15 +49,26 @@ namespace lab1
         }
 
         public void SaveToFile()
-        {
+        {                      
             string fileName = "plikDane.txt";
             FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate);
 
             using (StreamWriter sw = new StreamWriter(stream))
             {
                 sw.WriteLine(this.ToString());
+            }           
+        }
+
+        public void SaveToFileSerialized()
+        {            
+            var serializer = new XmlSerializer(typeof(List<double?>));
+            var time = DateTime.Now;
+            string fileName = $"{time.Year}_{time.Month}_{time.Day}_{time.Hour}_{time.Minute}_{time.Second}.txt";
+            FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate);
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                serializer.Serialize(sw, RandomNumbersList);                
             }
-           
         }
 
         public override string ToString()
@@ -62,7 +77,10 @@ namespace lab1
             
             for (int i = 0; i < PrintCount; i++)
             {
-                stringBuilder.AppendLine(string.Format($"{RandomNumbersList[i]:F2}"));
+                if (RandomNumbersList[i] != null)
+                {
+                    stringBuilder.AppendLine(string.Format($"{RandomNumbersList[i]:F2}"));
+                }
             }
             return stringBuilder.ToString();
         }

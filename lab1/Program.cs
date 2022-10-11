@@ -15,4 +15,5 @@ else
     Console.WriteLine("There was an error trying to parse input, are you sure that you are providing a positive intiger value?");
 }
 temperatureSensorSimulator.SaveToFile();
+temperatureSensorSimulator.SaveToFileSerialized();
 Console.WriteLine(temperatureSensorSimulator.ToString());
