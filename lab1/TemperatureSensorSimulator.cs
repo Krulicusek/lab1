@@ -11,13 +11,13 @@ namespace lab1
         List<double?> RandomNumbersList
         {
             get => randomNumbersList;
-            set => GetRandomNumbersList(10);
+            set => GetReadingsList(10);
         }
 
         public int PrintCount { get; set; }
         #endregion
         #region Methods
-        public void GetRandomNumbersList(int count)
+        public void GetReadingsList(int count)
         {
             List<double?> numbers = new List<double?>();
             for (int i = 0; i <= count; i++)
@@ -46,9 +46,12 @@ namespace lab1
 
         public void SaveToFile()
         {
-            using (StreamWriter sw = new StreamWriter(Path.Combine(Path.GetTempPath(), "plikDane.txt")))
-            {
+            string fileName = "plikDane.txt";
+            FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate);
 
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                sw.WriteLine(this.ToString());
             }
            
         }
